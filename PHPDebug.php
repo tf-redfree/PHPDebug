@@ -73,7 +73,15 @@ class PHPDebug {
         set_error_handler(array($this, 'error_handler'), E_ALL);
     }
     
-    
+    /**
+     * Error handler for PHPDebug
+     * @param var $error_severity
+     * @param var $error_message
+     * @param var $err_file
+     * @param var $err_line
+     * @param array $err_contextInformation
+     * @throws PHPDebugInvalidSettingException 
+     */
     public function error_handler($error_severity, $error_message, $err_file, $err_line, array $err_contextInformation) {
         $this->error_appendBuffer($error_severity, $error_message, $err_file, $err_line, $err_contextInformation);
         if($this->error_handler_stop_on_error === true) {
@@ -83,11 +91,22 @@ class PHPDebug {
         }
     }
     
+    /**
+     * Append given error to the error output buffer
+     * @param var $error_severity
+     * @param var $error_message
+     * @param var $err_file
+     * @param var $err_line
+     * @param array $err_contextInformation 
+     */
     protected function error_appendBuffer($error_severity, $error_message, $err_file, $err_line, array $err_contextInformation) {
         
     }
     
     
+    protected function phpdebug_finished() {
+        
+    }
     
 }
 
