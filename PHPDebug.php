@@ -20,6 +20,27 @@ require_once('PHPDebug.internalexceptions.php');
  */
 class PHPDebug {
     /**
+     *  
+     */
+    protected $error_lookup = array(
+        E_ERROR => 'E_ERROR',
+        E_WARNING => 'E_WARNING',
+        E_PARSE => 'E_PARSE', /*should never be seen*/
+        E_NOTICE => 'E_NOTICE',
+        E_CORE_ERROR => 'E_CORE_ERROR',
+        E_CORE_WARNING => 'E_CORE_WARNING',
+        E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+        E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+        E_USER_ERROR => 'E_USER_ERROR',
+        E_USER_WARNING => 'E_USER_WARNING',
+        E_USER_NOTICE => 'E_USER_NOTICE',
+        2048 => 'E_STRICT',
+        4096 => 'E_RECOVERABLE_ERROR',
+        8192 => 'E_DEPRECATED',
+        16384 => 'E_USER_DEPRECATED',
+        E_ALL => 'E_ALL'
+    );
+    /**
      *   List of variables we expect as input
      */
     protected $expectedVariables = array(
@@ -30,6 +51,15 @@ class PHPDebug {
         4 => array('varname' => 'error_handler_buffer', 'stopifmissing' => false, 'default' => true),
         5 => array('varname' => 'error_handler_stop_on_error', 'stopifmissing' => false, 'default' => false),
     );
+    /**
+     *  Error Buffer Container
+     */
+    protected $error_buffer = array(
+        'error_count' => 0,
+        'error_worst' => 0,
+        'error_buffer'
+    );
+    
     
     /**
      * List of variables we read in from settings
@@ -41,11 +71,7 @@ class PHPDebug {
     protected $error_handler_buffer = null;
     protected $error_handler_stop_on_error = null;
     
-    protected $error_buffer = array(
-        'error_count' => 0,
-        'error_worst' => 0,
-        'error_buffer'
-    );
+    
     /**
      * PHPDebug Constructor
      * @param array $settings
@@ -85,7 +111,10 @@ class PHPDebug {
     public function error_handler($error_severity, $error_message, $err_file, $err_line, array $err_contextInformation) {
         $this->error_appendBuffer($error_severity, $error_message, $err_file, $err_line, $err_contextInformation);
         if($this->error_handler_stop_on_error === true) {
+            // Stop Execution now
             
+        } elseif($this->error_handler_stop_on_error === false) { 
+            // Nothing
         } else {
             throw new PHPDebugInvalidSettingException("PHPDebug: ERROR, Invalid Setting specified in 'error_handler_stop_on_error'.".PHP_EOL);
         }
@@ -100,7 +129,9 @@ class PHPDebug {
      * @param array $err_contextInformation 
      */
     protected function error_appendBuffer($error_severity, $error_message, $err_file, $err_line, array $err_contextInformation) {
-        
+        $this->error_buffer['error_count']++;
+        //$this->error_buffer['error_worst'] = ?? //TODO: Implement Later
+        echo $error_severity;
     }
     
     
