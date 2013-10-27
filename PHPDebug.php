@@ -68,6 +68,7 @@ class PHPDebug {
     protected $error_handler_use = null;
     protected $error_handler_e_fatal_use = null;
     protected $excep_handler_use = null;
+    protected $PHPDebug_CLI = null;
     protected $error_handler_types = null;
     protected $error_handler_buffer = null;
     protected $error_handler_stop_on_error = null;
@@ -80,7 +81,6 @@ class PHPDebug {
      * TODO: Might be helpful if we cleanse the input? are we expecting a boolean etc.
      */
     public function __construct(array $settings) {
-        
         // Loop through expected variables and check we have them in the input
         foreach($this->expectedVariables as $variable) {
             if(isset($settings[$variable['varname']]) === false) {
@@ -98,6 +98,7 @@ class PHPDebug {
         }
         
         set_error_handler(array($this, 'error_handler'), E_ALL);
+        register_shutdown_function(array($this, 'phpdebug_shutdown_function'));
     }
     
     /**
@@ -132,12 +133,39 @@ class PHPDebug {
     protected function error_appendBuffer($error_severity, $error_message, $err_file, $err_line, array $err_contextInformation) {
         $this->error_buffer['error_count']++;
         //$this->error_buffer['error_worst'] = ?? //TODO: Implement Later
-        echo $error_severity;
+        $errorList = $this->error_geterrors($error_severity);
+        
+        if($this->PHPDebug_CLI === true) {
+            $this->error_buffer['error_buffer'] .= "Error Number\t\t: {$this->error_buffer['error_count']}".PHP_EOL;
+            $this->error_buffer['error_buffer'] .= "File:Line\t\t: {$err_file}:{$err_line}".PHP_EOL;
+            $this->error_buffer['error_buffer'] .= "Flags\t\t\t: {$errorList}".PHP_EOL;
+            $this->error_buffer['error_buffer'] .= "Message\t\t\t: {$error_message}".PHP_EOL;
+        } elseif($this->PHPDebug_CLI === false) {
+            throw new Exception("Not yet implemented");
+        } else {
+            throw new PHPDebugInvalidSettingException("PHPDebug: ERROR, Invalid Setting specified in 'PHPDebug_CLI'.".PHP_EOL);
+        }
+    }
+    
+    /**
+     * Convert the errors into a string for display
+     * @param type $error_severity
+     * @return string 
+     */
+    protected function error_geterrors($error_severity) {
+        $str = "";
+        foreach($this->error_lookup as $key => $value) {
+            if($key === E_ALL) { continue; }
+            if(($key & $error_severity) == $key) {
+                $str .= $value."({$key}); ";
+            }
+        }
+        return $str;
     }
     
     
-    protected function phpdebug_finished() {
-        
+    public function phpdebug_shutdown_function() {
+        echo $this->error_buffer['error_buffer'];
     }
     
 }
