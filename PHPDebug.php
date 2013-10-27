@@ -50,6 +50,7 @@ class PHPDebug {
         3 => array('varname' => 'error_handler_types', 'stopifmissing' => false, 'default' => E_ALL),
         4 => array('varname' => 'error_handler_buffer', 'stopifmissing' => false, 'default' => true),
         5 => array('varname' => 'error_handler_stop_on_error', 'stopifmissing' => false, 'default' => false),
+        6 => array('varname' => 'PHPDebug_CLI', 'stopifmissing' => true, 'default' => null)
     );
     /**
      *  Error Buffer Container
