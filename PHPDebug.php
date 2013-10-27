@@ -58,7 +58,7 @@ class PHPDebug {
     protected $error_buffer = array(
         'error_count' => 0,
         'error_worst' => 0,
-        'error_buffer'
+        'error_buffer' => ''
     );
     
     
