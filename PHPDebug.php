@@ -165,7 +165,9 @@ class PHPDebug {
         return $str;
     }
     
-    
+    /**
+     * PHPDebug Shutdown Function
+     */
     public function phpdebug_shutdown_function() {
         echo $this->error_buffer['error_buffer'];
     }
