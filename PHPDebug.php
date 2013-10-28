@@ -98,6 +98,7 @@ class PHPDebug {
         }
         
         set_error_handler(array($this, 'error_handler'), E_ALL);
+        set_exception_handler(array($this, 'excep_handler'));
         register_shutdown_function(array($this, 'phpdebug_shutdown_function'));
     }
     
@@ -167,6 +168,18 @@ class PHPDebug {
     }
     
     // ------------------- Excep Handler ------------------- //
+    public function excep_handler(Exception $exception) {
+        $eol = '';
+        //$eol = PHP_EOL;
+        //print_r($exception);
+        echo <<<EOF
+PHPDebug: Execution was halted due to Uncaught Exception{$eol}
+|-- File:line\t\t: {$exception->getFile()}:{$exception->getLine()}{$eol}
+|-- Message\t\t: {$exception->getMessage()}{$eol}
+{$eol} 
+EOF;
+    }
+    
     // ------------------- Outpt Handler ------------------- //
     /**
      * PHPDebug Shutdown Function
