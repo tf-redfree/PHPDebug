@@ -140,6 +140,8 @@ class PHPDebug {
             $this->error_buffer['error_buffer'] .= "File:Line\t\t: {$err_file}:{$err_line}".PHP_EOL;
             $this->error_buffer['error_buffer'] .= "Flags\t\t\t: {$errorList}".PHP_EOL;
             $this->error_buffer['error_buffer'] .= "Message\t\t\t: {$error_message}".PHP_EOL;
+            unset($err_contextInformation['_______PHPDebug']);
+            //$this->error_buffer['error_buffer'] .= "Context\t\t\t: ".print_r($err_contextInformation, true).PHP_EOL;
         } elseif($this->PHPDebug_CLI === false) {
             throw new Exception("Not yet implemented");
         } else {
