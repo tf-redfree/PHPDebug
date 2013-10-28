@@ -20,6 +20,7 @@
          * affect the behaviour which PHPDebug has when executing 
          */
         // Output the information in a command-line friendly way (when false, it will output HTML)
+        'PHPDebug_CLI' => (PHP_SAPI == 'cli'),
         // Which error types should debugger catch? specify this is you want to catch a certain type yourself and define an error handler for it
         'error_handler_types' => E_ALL,             // Note: We do not handle E_FATAL in this part of PHPDebug, see: 'error_handler_e_fatal_use'
         // Store a buffer of errors and print it out last (ignored if 'error_handler_stop_on_error' is true)
