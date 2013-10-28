@@ -217,8 +217,26 @@ EOF;
      * PHPDebug Shutdown Function
      */
     public function phpdebug_shutdown_function() {
-        echo "\n\nList of detected errors\n";
-        echo $this->error_buffer['error_buffer'];
+       
+        if($this->PHPDebug_CLI === true) {
+            echo "\n\nPHPDebug :: Error List\n";
+            echo $this->error_buffer['error_buffer'];
+            return;
+        }
+        // HTML Output Mode
+        echo <<<EOA
+            <br /><br />
+            <font style="font-size: 1.4em; font-weight: bold; color: {$this->HTMLo_font_color_normal}">PHPDebug :: Error List</font><br />
+            <table style="width: 100%:" border>
+                <tr>
+                    <td style="width: 10%; font-weight: bold;">Error #</td>
+                    <td style="width: 40%; font-weight: bold;">File:<i>Line</i></td>
+                    <td style="width: 10%; font-weight: bold;">FLAGS</td>
+                    <td style="width: 40%; font-weight: bold;">Error Message</td>
+                </tr>
+                {$this->error_buffer['error_buffer']}
+            </table>
+EOA;
     }
     
 }
