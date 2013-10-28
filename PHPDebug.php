@@ -182,12 +182,34 @@ EOB;
         $eol = '';
         //$eol = PHP_EOL;
         //print_r($exception);
+        $classof = get_class($exception);
+        $stack = $exception->getTrace();
+        if($this->PHPDebug_CLI === true) {
         echo <<<EOF
-PHPDebug: Execution was halted due to Uncaught Exception{$eol}
+PHPDebug :: Execution was halted due to Uncaught Exception type {$classof}{$eol}
 |-- File:line\t\t: {$exception->getFile()}:{$exception->getLine()}{$eol}
 |-- Message\t\t: {$exception->getMessage()}{$eol}
+|-- Stack\t\t: {$exception->getTraceAsString()}
 {$eol} 
 EOF;
+        exit(1);
+        } elseif($this->PHPDebug_CLI === false) {
+            $stackTrace = "#0 - main<br />";
+            foreach($stack as $key => $value) {
+                //print_r($value);
+                $j = $key+1;
+                $stackTrace .= "#{$j} - {$value['function']}(Arg".print_r($value['args'], true).")<br />";
+            }
+            echo <<<EOF
+            <font style="font-size: 1.4em; color: {$this->HTMLo_font_color_error};">PHPDebug :: Execution was halted due to uncaught exception of type {$classof}</font><br />
+            <font style="font-weight: bold; color: {$this->HTMLo_font_color_error};">{$classof}</font> @ {$exception->getFile()}:{$exception->getLine()}<br />
+            <font style="color: {$this->HTMLo_font_color_error};"><b>Message:</b>&nbsp;{$exception->getMessage()}</font><br />
+            <font style="color: {$this->HTMLo_font_color_normal};"><b>Stack Trace:</b><br />{$stackTrace}</font>
+EOF;
+        exit(1);
+        } else {
+            throw new PHPDebugInvalidSettingException("PHPDebug: ERROR, Invalid Setting specified in 'PHPDebug_CLI'.".PHP_EOL);
+        }
     }
     
     // ------------------- Outpt Handler ------------------- //
