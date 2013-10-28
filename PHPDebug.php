@@ -116,7 +116,7 @@ class PHPDebug {
         $this->error_appendBuffer($error_severity, $error_message, $err_file, $err_line, $err_contextInformation);
         if($this->error_handler_stop_on_error === true) {
             // Stop Execution now
-            
+            die("Execution stopped on request (`error_handler_stop_on_error` === true)".PHP_EOL);
         } elseif($this->error_handler_stop_on_error === false) { 
             // Nothing
         } else {
@@ -138,14 +138,15 @@ class PHPDebug {
         $errorList = $this->error_geterrors($error_severity);
         
         if($this->PHPDebug_CLI === true) {
-            $this->error_buffer['error_buffer'] .= "Error Number\t\t: {$this->error_buffer['error_count']}".PHP_EOL;
-            $this->error_buffer['error_buffer'] .= "File:Line\t\t: {$err_file}:{$err_line}".PHP_EOL;
-            $this->error_buffer['error_buffer'] .= "Flags\t\t\t: {$errorList}".PHP_EOL;
-            $this->error_buffer['error_buffer'] .= "Message\t\t\t: {$error_message}".PHP_EOL;
+            $this->error_buffer['error_buffer'] .= "|-- Error Number\t: {$this->error_buffer['error_count']}".PHP_EOL;
+            $this->error_buffer['error_buffer'] .= "|-- File:Line\t\t: {$err_file}:{$err_line}".PHP_EOL;
+            $this->error_buffer['error_buffer'] .= "|-- Flags\t\t: {$errorList}".PHP_EOL;
+            $this->error_buffer['error_buffer'] .= "|-- Message\t\t: {$error_message}".PHP_EOL;
+            $this->error_buffer['error_buffer'] .= PHP_EOL;
             unset($err_contextInformation['_______PHPDebug']);
-            //$this->error_buffer['error_buffer'] .= "Context\t\t\t: ".print_r($err_contextInformation, true).PHP_EOL;
+            //$this->error_buffer['error_buffer'] .= "|-- Context\t\t\t: ".print_r($err_contextInformation, true).PHP_EOL;
         } elseif($this->PHPDebug_CLI === false) {
-            throw new Exception("Not yet implemented");
+            
         } else {
             throw new PHPDebugInvalidSettingException("PHPDebug: ERROR, Invalid Setting specified in 'PHPDebug_CLI'.".PHP_EOL);
         }
@@ -185,6 +186,7 @@ EOF;
      * PHPDebug Shutdown Function
      */
     public function phpdebug_shutdown_function() {
+        echo "\n\nList of detected errors\n";
         echo $this->error_buffer['error_buffer'];
     }
     
