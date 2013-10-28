@@ -148,7 +148,14 @@ class PHPDebug {
             unset($err_contextInformation['_______PHPDebug']);
             //$this->error_buffer['error_buffer'] .= "|-- Context\t\t\t: ".print_r($err_contextInformation, true).PHP_EOL;
         } elseif($this->PHPDebug_CLI === false) {
-            
+$this->error_buffer['error_buffer'] .= <<<EOB
+        <tr>
+            <td style="width: 10%; font-weight: bold; color: {$this->HTMLo_font_color_normal}">{$this->error_buffer['error_count']}</td>
+            <td style="width: 40%; font-weight: bold; color: {$this->HTMLo_font_color_normal}">{$err_file}:<i>{$err_line}</i></td>
+            <td style="width: 10%; font-style: italic; color: {$this->HTMLo_font_color_normal}">{$errorList}</td>
+            <td style="width: 40%; color: {$this->HTMLo_font_color_normal}"><i>{$error_message}</i></td>
+        </tr>
+EOB;
         } else {
             throw new PHPDebugInvalidSettingException("PHPDebug: ERROR, Invalid Setting specified in 'PHPDebug_CLI'.".PHP_EOL);
         }
