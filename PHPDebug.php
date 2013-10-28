@@ -73,7 +73,7 @@ class PHPDebug {
     protected $error_handler_buffer = null;
     protected $error_handler_stop_on_error = null;
     
-    
+    // ------------------- Setup Handler ------------------- //
     /**
      * PHPDebug Constructor
      * @param array $settings
@@ -101,6 +101,7 @@ class PHPDebug {
         register_shutdown_function(array($this, 'phpdebug_shutdown_function'));
     }
     
+    // ------------------- Error Handler ------------------- //
     /**
      * Error handler for PHPDebug
      * @param var $error_severity
@@ -165,6 +166,8 @@ class PHPDebug {
         return $str;
     }
     
+    // ------------------- Excep Handler ------------------- //
+    // ------------------- Outpt Handler ------------------- //
     /**
      * PHPDebug Shutdown Function
      */
