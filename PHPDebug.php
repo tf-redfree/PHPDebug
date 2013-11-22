@@ -189,7 +189,7 @@ EOB;
 PHPDebug :: Execution was halted due to Uncaught Exception type {$classof}{$eol}
 |-- File:line\t\t: {$exception->getFile()}:{$exception->getLine()}{$eol}
 |-- Message\t\t: {$exception->getMessage()}{$eol}
-|-- Stack\t\t: {$exception->getTraceAsString()}
+|-- Stack\t\t: \n{$exception->getTraceAsString()}
 {$eol} 
 EOF;
         exit(1);
@@ -217,7 +217,9 @@ EOF;
      * PHPDebug Shutdown Function
      */
     public function phpdebug_shutdown_function() {
-       
+       if($this->error_buffer['error_count'] == 0) {
+           return;
+       }
         if($this->PHPDebug_CLI === true) {
             echo "\n\nPHPDebug :: Error List\n";
             echo $this->error_buffer['error_buffer'];
